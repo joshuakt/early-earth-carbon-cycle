@@ -38,7 +38,7 @@ numpy.save('options_array.npy',options_array)
 
 #########################################################################
 
-Dissolution_change_array=numpy.zeros(shape=it_num)
+#Dissolution_change_array=numpy.zeros(shape=it_num)
 imbalance_array=[]   # This array will contain the mass conservation imbalance for each forward model run
 
 ## Run forward model once with arbitrary parameters to define size of array that will contain outputs
@@ -91,7 +91,7 @@ def try_run_forward(ii):
         ## Attempt to run forward model
         try:
             [all_output[:,:,ii],imb]=Forward_Model(W,F_outgass,n,climp,tdep_weath,mod_sea,alt_frac,Mp_frac,lfrac,carb_exp,sed_thick,F_carbw,fpel,CWF,deep_grad,coef_for_diss,beta,n_out,mm,growth_timing,new_add_Ca,Ebas)
-            Dissolution_change_array[ii]=all_output[19,numpy.size(all_output[19,:,:])/it_num-1,ii]/all_output[19,0,ii]       
+            #Dissolution_change_array[ii]=all_output[19,numpy.size(all_output[19,:,:])/it_num-1,ii]/all_output[19,0,ii]
             if (numpy.isnan(all_output[7,98,ii]))or(all_output[14,98,ii]<0.0): # If non-sensical outputs, report error and try iteration again
                 print "error, forward model produced non physical outputs - try again"
                 print " "
@@ -111,7 +111,7 @@ if Parallelize == 0:
     kk=0
     while kk<it_num:
         try:
-            [jj,all_output[:,:,kk],imbalan,n_out,beta,mm]=try_run_forward(kk) # fill in kk-th element of output array, and record mass imbalance
+            [jj,all_output[:,:,kk],imbalan,n_out,beta,mm,coef_for_diss,Ebas,deep_grad,carb_exp,tdep_weath,climp,W,n]=try_run_forward(kk) # fill in kk-th element of output array, and record mass imbalance
             imbalance_array.append(imbalan)
             kk=kk+1
         except:
